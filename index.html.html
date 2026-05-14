@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#0f0f1a"/>
+<title>MRV São Luís — Gestão Comercial</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --mrv:#E3000F;--mrv2:#b8000c;--dark:#0d0d1a;--card:#161625;
+  --card2:#1e1e32;--border:rgba(255,255,255,0.07);--inp:rgba(255,255,255,0.05);
+  --hover:rgba(255,255,255,0.04);--text:#e8eaf0;--muted:#7f8c9a;
+  --green:#27ae60;--yellow:#f39c12;--orange:#e67e22;--red:#e74c3c;
+  --blue:#2980b9;--purple:#8e44ad;--cyan:#00b4d8;
+  --shadow:0 8px 40px rgba(0,0,0,.55);--r:14px;--rs:9px;--sw:255px;--top:60px
+}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+#sb{width:var(--sw);min-height:100vh;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:300;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.sb-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px;flex-shrink:0}
+.sb-logo-box{width:42px;height:42px;background:var(--mrv);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0}
+.sb-logo-txt strong{font-size:14px;color:#fff;display:block;line-height:1.2}
+.sb-logo-txt span{font-size:11px;color:var(--muted)}
+.sb-scroll{flex:1;overflow-y:auto;padding:8px 0}
+.sb-sec{padding:12px 16px 4px;font-size:10px;font-weight:700;letter-spacing:1.8px;color:var(--muted);text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;color:var(--muted);font-size:13px;border-left:3px solid transparent;transition:all .18s;user-select:none}
+.sb-item:hover{background:var(--hover);color:var(--text)}
+.sb-item.on{background:rgba(227,0,15,.1);color:#fff;border-left-color:var(--mrv)}
+.sb-item .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--mrv);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;min-width:18px;text-align:center}
+.sb-foot{padding:12px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;line-height:1.7;flex-shrink:0}
+#main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+#top{background:var(--card);border-bottom:1px solid var(--border);padding:0 22px;height:var(--top);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.top-l{display:flex;align-items:center;gap:12px}
+.top-title{font-size:16px;font-weight:700;color:#fff}
+.top-sub{font-size:11px;color:var(--muted)}
+.top-r{display:flex;align-items:center;gap:8px}
+.ib{width:36px;height:36px;background:var(--inp);border:1px solid var(--border);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--muted);transition:all .18s}
+.ib:hover{background:var(--hover);color:#fff}
+.clock-box{background:var(--inp);border:1px solid var(--border);border-radius:var(--rs);padding:5px 11px;font-size:12px;color:var(--muted);font-family:monospace}
+#cnt{flex:1;padding:24px;overflow-y:auto}
+.pg{display:none}.pg.on{display:block}
+.ph{margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.ph-l h1{font-size:21px;font-weight:800;color:#fff;margin-bottom:2px}
+.ph-l p{font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative;overflow:hidden;cursor:default;transition:transform .2s}
+.sc:hover{transform:translateY(-2px)}
+.sc::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
+.sc.cr::after{background:var(--mrv)}.sc.cg::after{background:var(--green)}
+.sc.cy::after{background:var(--yellow)}.sc.cb::after{background:var(--cyan)}
+.sc.cp::after{background:var(--purple)}.sc.co::after{background:var(--orange)}
+.sc-ico{font-size:24px;margin-bottom:8px}
+.sc-val{font-size:28px;font-weight:800;color:#fff;line-height:1}
+.sc-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.card-ttl{font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:13px}
+.fi{display:flex;flex-direction:column;gap:5px}
+.fi.full{grid-column:1/-1}
+.fl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.fc{background:var(--inp);border:1px solid var(--border);border-radius:var(--rs);padding:8px 12px;color:var(--text);font-size:13px;outline:none;transition:border-color .18s;width:100%;font-family:inherit}
+.fc:focus{border-color:var(--mrv)}
+.fc option{background:#1e1e32;color:var(--text)}
+textarea.fc{resize:vertical;min-height:76px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .18s;white-space:nowrap;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--mrv);color:#fff}.bp:hover{background:var(--mrv2)}
+.bs{background:var(--inp);border:1px solid var(--border);color:var(--text)}.bs:hover{background:var(--hover)}
+.bw{background:var(--yellow);color:#111}.bw:hover{filter:brightness(1.1)}
+.bd{background:var(--red);color:#fff}.bd:hover{filter:brightness(1.1)}
+.sm{padding:5px 10px;font-size:11px}
+.tw{overflow-x:auto;border-radius:var(--rs)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:rgba(255,255,255,0.025)}
+th{padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--hover)}
+.tda{display:flex;gap:4px}
+.b{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.br{background:rgba(231,76,60,.15);color:#e74c3c}
+.bg2{background:rgba(39,174,96,.15);color:#27ae60}
+.by{background:rgba(243,156,18,.15);color:#f39c12}
+.bb2{background:rgba(0,180,216,.15);color:#00b4d8}
+.bgr{background:rgba(127,140,141,.15);color:#95a5a6}
+.bo{background:rgba(230,126,34,.15);color:#e67e22}
+.sbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.si{flex:1;min-width:160px;background:var(--inp);border:1px solid var(--border);border-radius:var(--rs);padding:8px 12px;color:var(--text);font-size:13px;outline:none;font-family:inherit}
+.si:focus{border-color:var(--mrv)}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;padding:14px}
+.mo.open{display:flex}
+.md{background:var(--card);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:640px;max-height:93vh;overflow-y:auto;box-shadow:var(--shadow);animation:mdin .25s ease}
+@keyframes mdin{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.md-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:1}
+.md-ttl{font-size:15px;font-weight:700;color:#fff}
+.md-x{width:28px;height:28px;background:var(--inp);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--muted);transition:all .18s}
+.md-x:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.md-b{padding:20px}
+.md-ft{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--card)}
+#tc{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 15px;display:flex;align-items:center;gap:9px;min-width:260px;max-width:340px;box-shadow:var(--shadow);animation:tin .25s ease;border-left:4px solid var(--green)}
+.toast.err{border-left-color:var(--red)}.toast.warn{border-left-color:var(--yellow)}.toast.info{border-left-color:var(--cyan)}
+@keyframes tin{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+.t-ico{font-size:16px}.t-msg{font-size:13px;color:var(--text);flex:1}
+.av{border-radius:var(--rs);padding:10px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5}
+.av.exp{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.25)}
+.av.warn{background:rgba(243,156,18,.1);border:1px solid rgba(243,156,18,.25)}
+.chart{display:flex;flex-direction:column;gap:9px}
+.cb{display:flex;align-items:center;gap:10px}
+.cb-l{font-size:12px;color:var(--muted);width:200px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-t{flex:1;height:7px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.cb-f{height:100%;border-radius:4px;transition:width .5s ease}
+.cb-v{font-size:12px;font-weight:700;color:var(--text);width:22px;text-align:right}
+.num{background:rgba(255,255,255,0.07);border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700;color:var(--muted)}
+.dv{font-weight:700;font-size:12px}
+.dv-ok{color:var(--green)}.dv-w{color:var(--yellow)}.dv-c{color:var(--orange)}.dv-e{color:var(--red)}
+.empty{text-align:center;padding:44px 20px;color:var(--muted)}
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.kc{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.kc-hd{font-size:12px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.kcard{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:11px;margin-bottom:8px;font-size:12px;cursor:pointer;transition:all .18s}
+.kcard:hover{border-color:var(--mrv);transform:translateY(-1px)}
+.kcard-tipo{font-size:10px;color:var(--muted);margin-bottom:4px}
+.kcard-sol{font-weight:700;color:#fff;margin-bottom:3px}
+.kcard-emp{font-size:11px;color:var(--muted)}
+@media(max-width:900px){#sb{transform:translateX(-100%)}#sb.open{transform:translateX(0)}#main{margin-left:0}.stats{grid-template-columns:repeat(2,1fr)}#cnt{padding:14px}.fg{grid-template-columns:1fr}.kanban{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav id="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-box">MRV</div>
+    <div class="sb-logo-txt"><strong>MRV São Luís</strong><span>Assistente Comercial</span></div>
+  </div>
+  <div class="sb-scroll">
+    <div class="sb-sec">Principal</div>
+    <div class="sb-item on" data-pg="dashboard" onclick="nav(this)"><span class="ic">📊</span>Dashboard</div>
+    <div class="sb-item" data-pg="fila" onclick="nav(this)"><span class="ic">📋</span>Fila de Demandas<span class="sb-badge" id="bdg-fila">0</span></div>
+    <div class="sb-sec">Cadastros</div>
+    <div class="sb-item" data-pg="imob" onclick="nav(this)"><span class="ic">🏢</span>Imobiliárias</div>
+    <div class="sb-item" data-pg="corr" onclick="nav(this)"><span class="ic">👤</span>Corretores</div>
+    <div class="sb-sec">Financeiro</div>
+    <div class="sb-item" data-pg="notas" onclick="nav(this)"><span class="ic">💰</span>Notas e Pagamentos<span class="sb-badge" id="bdg-notas" style="display:none">!</span></div>
+    <div class="sb-item" data-pg="forn" onclick="nav(this)"><span class="ic">🧾</span>Notas de Fornecimento</div>
+    <div class="sb-sec">Suporte</div>
+    <div class="sb-item" data-pg="cham" onclick="nav(this)"><span class="ic">🎫</span>Chamados<span class="sb-badge" id="bdg-cham">0</span></div>
+    <div class="sb-sec">Sistema</div>
+    <div class="sb-item" data-pg="log" onclick="nav(this)"><span class="ic">📜</span>Log do Sistema</div>
+  </div>
+  <div class="sb-foot"><strong style="color:var(--mrv)">MRV São Luís/MA</strong><br>v2.0 · <span id="foot-dt"></span></div>
+</nav>
+<div id="main">
+  <div id="top">
+    <div class="top-l">
+      <div class="ib" onclick="toggleSB()">☰</div>
+      <div><div class="top-title" id="top-ttl">Dashboard</div><div class="top-sub">MRV São Luís — Gestão de Demandas</div></div>
+    </div>
+    <div class="top-r">
+      <div class="clock-box" id="clk">--:--:--</div>
+      <div class="ib" onclick="abrirModal('mo-dem')" title="Nova Demanda">➕</div>
+      <div class="ib" onclick="exportar()" title="Exportar CSV">📤</div>
+      <div class="ib" onclick="limparTudo()" title="Limpar dados">🗑️</div>
+    </div>
+  </div>
+  <div id="cnt">
+    <div class="pg on" id="pg-dashboard">
+      <div class="ph"><div class="ph-l"><h1>📊 Dashboard</h1><p id="dash-data">Carregando...</p></div><button class="btn bp" onclick="abrirModal('mo-dem')">➕ Nova Demanda</button></div>
+      <div class="stats" id="stats"></div>
+      <div id="dash-alertas"></div>
+      <div class="card">
+        <div class="card-hd"><div class="card-ttl">🕐 Últimas Demandas</div><button class="btn bs sm" onclick="navPg('fila')">Ver todas →</button></div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Tipo</th><th>Solicitante</th><th>Empreendimento</th><th>Prioridade</th><th>Status</th><th>Data</th></tr></thead><tbody id="tb-recentes"></tbody></table></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card"><div class="card-hd"><div class="card-ttl">📈 Por Tipo</div></div><div id="chart-tipo" class="chart"></div></div>
+        <div class="card"><div class="card-hd"><div class="card-ttl">🏗️ Por Empreendimento</div></div><div id="chart-emp" class="chart"></div></div>
+      </div>
+    </div>
+    <div class="pg" id="pg-fila">
+      <div class="ph"><div class="ph-l"><h1>📋 Fila de Demandas</h1><p>Ordem de chegada (FIFO)</p></div><button class="btn bp" onclick="abrirModal('mo-dem')">➕ Nova Demanda</button></div>
+      <div class="kanban" id="kanban"></div>
+      <div class="card" style="padding:0">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border)">
+          <div class="sbar">
+            <input class="si" id="s-fila" placeholder="🔍 Buscar..." oninput="renderFila()">
+            <select class="fc" id="f-fila-st" onchange="renderFila()" style="width:170px"><option value="">Todos os status</option><option>🔴 Pendente</option><option>🟡 Em andamento</option><option>🟢 Concluído</option><option>⚪ Cancelado</option></select>
+            <select class="fc" id="f-fila-tp" onchange="renderFila()" style="width:200px"><option value="">Todos os tipos</option><option>Cadastro de Imobiliária</option><option>Cadastro de Corretor</option><option>Reativação de Corretor</option><option>Acompanhar Nota/Pagamento</option><option>Abertura de Chamado</option><option>Lançar Nota de Fornecimento</option></select>
+          </div>
+        </div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Data/Hora</th><th>Tipo</th><th>Solicitante</th><th>Empreendimento</th><th>Prioridade</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tb-fila"></tbody></table></div>
+      </div>
+    </div>
+    <div class="pg" id="pg-imob">
+      <div class="ph"><div class="ph-l"><h1>🏢 Imobiliárias</h1><p>Cadastro e gestão de imobiliárias parceiras</p></div><button class="btn bp" onclick="abrirModal('mo-imob')">➕ Nova Imobiliária</button></div>
+      <div class="sbar"><input class="si" id="s-imob" placeholder="🔍 Buscar..." oninput="renderImob()"><select class="fc" id="f-imob-st" onchange="renderImob()" style="width:160px"><option value="">Todos os status</option><option>✅ Ativo</option><option>❌ Inativo</option><option>🔵 Reativado</option><option>🟡 Em análise</option></select></div>
+      <div class="card" style="padding:0"><div class="tw"><table><thead><tr><th>#</th><th>Nome</th><th>CNPJ</th><th>Responsável</th><th>Telefone</th><th>CRECI PJ</th><th>Empreendimento</th><th>Status*
